@@ -46,7 +46,7 @@ def predict_ffm():
     # Ensure the predicted FFM does not exceed the current weight
     # Clip the range to ensure it doesn't go above the current weight
     # predicted_ffm = min(predicted_ffm, ffm)
-    lower_bound = min(lower_bound, ffm)
+    # lower_bound = min(lower_bound, ffm)
     upper_bound = max(upper_bound, ffm)
 
     # Check if the current FFM is within the healthy range
