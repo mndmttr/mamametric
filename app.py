@@ -2,6 +2,9 @@ import os
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+@app.route('/')
+def home():
+    return "MamaMetric API is running!", 200
 
 @app.route('/predict-ffm', methods=['POST'])
 def predict_ffm():
