@@ -50,15 +50,21 @@ def predict_ffm():
     mean_bmi = 21  # Average BMI for normalization
     max_week = 40  # Full pregnancy duration in weeks
     
+    # Apply scaling factors to reduce coefficient contributions
+    # the scaling factors are not based on the paper
+    scaling_ffm = 0.5
+    scaling_bmi = 0.3
+    scaling_week = 0.2
+
     # Calculate predicted FFM range
     predicted_ffm = (
         intercept 
-        + beta_ffm * (ffm / mean_ffm) 
-        + beta_bmi * (bmi / mean_bmi) 
-        + beta_week * (week / max_week)
+        + scaling_ffm * beta_ffm * (ffm / mean_ffm) 
+        + scaling_bmi * beta_bmi * (bmi / mean_bmi) 
+        + scaling_week * beta_week * (week / max_week)
     )
 
-    margin = 5 # Example margin for lower bound and upper bound
+    margin = 0.05 * predicted_ffm # Example margin for lower bound and upper bound
     lower_bound = predicted_ffm - margin  
     upper_bound = predicted_ffm + margin  
 
@@ -76,9 +82,9 @@ def predict_ffm():
     else:
         message += f"Your current FFM {ffm} is NOT in this range."
         if ffm < lower_bound:
-            guidance = "You may need to increase your FFM."
+            guidance = "You may need to INCREASE your FFM. Consider making changes to your diet and exercise routine. More carbs and resistance training to increase muscle mass."
         else:
-            guidance = "You may need to decrease your FFM."
+            guidance = "You may need to DECREASE your FFM. Consider consulting with a healthcare provider. Maybe less sugar for the diet, more healthy protein and carbs."
         
 
     # Return the results
