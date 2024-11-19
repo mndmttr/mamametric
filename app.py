@@ -47,15 +47,21 @@ def predict_ffm():
     # Clip the range to ensure it doesn't go above the current weight
     # predicted_ffm = min(predicted_ffm, ffm)
     # lower_bound = min(lower_bound, ffm)
-    upper_bound = max(upper_bound, ffm)
+    # upper_bound = max(upper_bound, ffm)
 
     # Check if the current FFM is within the healthy range
     # Message for whether the current FFM is within the range
     message = f"Recommended FFM range for week {week}: {round(lower_bound, 1)} - {round(upper_bound, 1)} lbs. "
     if lower_bound <= ffm <= upper_bound:
         message += f"Your current FFM {ffm} is in this range."
+        guidance = "You're doing great. Keep up the good work!"
     else:
         message += f"Your current FFM {ffm} is NOT in this range."
+        if ffm < lower_bound:
+            guidance = "You may need to increase your FFM."
+        else:
+            guidance = "You may need to decrease your FFM."
+        
 
     # Return the results
     return jsonify({
@@ -65,7 +71,8 @@ def predict_ffm():
         "predicted_ffm": round(predicted_ffm, 2),
         "lower_bound": round(lower_bound, 2),
         "upper_bound": round(upper_bound, 2),
-        "message": message
+        "message": message,
+        "guidance": guidance
     })
 
 if __name__ == '__main__':
